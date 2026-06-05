@@ -10,7 +10,6 @@ public class Book {
         this.author = author;
         this.available = true;
     }
-
     public String getId() { return id; }
     public String getTitle() { return title; }
     public String getAuthor() { return author; }
