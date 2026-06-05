@@ -10,25 +10,37 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ReservationService {
+    private NotificationService notificationService;
     private List<Seat> seats;
     private List<Reservation> reservations;
     private Waitlist waitlist;
     private int reservationCounter;
 
     public ReservationService() {
+        this(null);
+    }
+
+    public ReservationService(NotificationService notificationService) {
         this.seats = new ArrayList<>();
         this.reservations = new ArrayList<>();
         this.waitlist = new Waitlist();
         this.reservationCounter = 1;
+        this.notificationService = notificationService;
 
-        // Example seats
         seats.add(new Seat(1));
         seats.add(new Seat(2));
         seats.add(new Seat(3));
     }
 
-    public void reserveSeat(String studentId, ReservationStrategy strategy, Scanner scanner) {
+    public void reserveSeat(String userId, ReservationStrategy strategy, Scanner scanner) {
         checkExpiredReservationsSilently();
+
+        for (Reservation reservation : reservations) {
+            if (reservation.getStudentId().equals(userId) && reservation.isActive()) {
+                System.out.println("You already have an active seat reservation. Please cancel it before making a new one.");
+                return;
+            }
+        }
 
         List<Seat> availableSeats = new ArrayList<>();
 
@@ -45,7 +57,7 @@ public class ReservationService {
             String answer = scanner.nextLine();
 
             if (answer.equalsIgnoreCase("yes")) {
-                waitlist.addStudent(studentId);
+                waitlist.addStudent(userId);
             } else {
                 System.out.println("You were not added to the waitlist.");
             }
@@ -73,31 +85,48 @@ public class ReservationService {
 
         Reservation reservation = new Reservation(
                 reservationCounter++,
-                studentId,
+                userId,
                 selectedSeat,
                 strategy.getExpirationMinutes()
         );
 
         reservations.add(reservation);
 
-        System.out.println("Seat reserved successfully.");
-        System.out.println("Reservation duration: " + strategy.getReservationDuration() + " hours");
-        System.out.println("Arrival expiration time: " + strategy.getExpirationMinutes() + " minutes");
-        System.out.println(reservation);
+        System.out.println("Seat " + selectedSeat.getSeatId() + " is reserved successfully for you.");
+        System.out.println("Reservation duration: " + strategy.getReservationDuration() + " hours.");
+        System.out.println("This seat expires in " + strategy.getExpirationMinutes() + " minutes.");
     }
 
-    public void cancelReservation(int reservationId) {
-        for (Reservation reservation : reservations) {
-            if (reservation.getReservationId() == reservationId && reservation.isActive()) {
-                reservation.cancelReservation();
-                System.out.println("Reservation cancelled successfully.");
+    public void cancelReservation(String userId, Scanner scanner) {
+        checkExpiredReservationsSilently();
 
-                assignSeatToNextWaitlistedStudent();
-                return;
+        Reservation activeReservation = null;
+
+        for (Reservation reservation : reservations) {
+            if (reservation.getStudentId().equals(userId) && reservation.isActive()) {
+                activeReservation = reservation;
+                break;
             }
         }
 
-        System.out.println("Reservation not found or already inactive.");
+        if (activeReservation == null) {
+            System.out.println("You do not have an active reservation to cancel.");
+            return;
+        }
+
+        System.out.println("You have an active reservation:");
+        System.out.println(activeReservation);
+        System.out.print("Do you want to cancel this reservation? (yes/no): ");
+
+        String answer = scanner.nextLine();
+
+        if (answer.equalsIgnoreCase("yes")) {
+            activeReservation.cancelReservation();
+            System.out.println("Your reservation has been cancelled successfully.");
+            assignSeatToNextWaitlistedStudent();
+        } else {
+            System.out.println("Reservation was not cancelled.");
+        }
     }
 
     private void checkExpiredReservationsSilently() {
@@ -111,50 +140,62 @@ public class ReservationService {
 
     private void assignSeatToNextWaitlistedStudent() {
         if (!waitlist.isEmpty()) {
-            String nextStudent = waitlist.getNextStudent();
-            System.out.println("Seat is now available for waitlisted student: " + nextStudent);
+            String nextUser = waitlist.getNextStudent();
+
+            if (notificationService != null) {
+                notificationService.notifySeatAvailable(nextUser);
+            } else {
+                System.out.println("A seat is now available for waitlisted user: " + nextUser);
+            }
         }
     }
 
-    public void showMyReservations(String studentId, Scanner scanner) {
+    public void showMyReservations(String userId) {
         checkExpiredReservationsSilently();
 
-        List<Reservation> myReservations = new ArrayList<>();
-        List<Reservation> activeReservations = new ArrayList<>();
+        boolean found = false;
 
         for (Reservation reservation : reservations) {
-            if (reservation.getStudentId().equals(studentId)) {
-                myReservations.add(reservation);
+            if (reservation.getStudentId().equals(userId)) {
                 System.out.println(reservation);
-
-                if (reservation.isActive()) {
-                    activeReservations.add(reservation);
-                }
+                found = true;
             }
         }
 
-        if (myReservations.isEmpty()) {
+        if (!found) {
             System.out.println("You do not have any reservations yet.");
-            return;
-        }
-
-        if (activeReservations.isEmpty()) {
-            System.out.println("You do not have any active reservations to cancel.");
-            return;
-        }
-
-        System.out.print("Do you want to cancel an active reservation? (yes/no): ");
-        String answer = scanner.nextLine();
-
-        if (answer.equalsIgnoreCase("yes")) {
-            System.out.print("Enter reservation ID to cancel: ");
-            int reservationId = scanner.nextInt();
-            scanner.nextLine();
-            cancelReservation(reservationId);
         }
     }
 
-    public void showWaitlist() {
-        System.out.println(waitlist);
+    public void showMyReservations(String userId, Scanner scanner) {
+        showMyReservations(userId);
+    }
+
+    public void showWaitlistStatus(String userId) {
+        if (!waitlist.containsStudent(userId)) {
+            System.out.println("You are not in the waitlist.");
+            return;
+        }
+
+        int position = waitlist.getStudentPosition(userId);
+
+        System.out.println("You are currently in the waitlist.");
+        System.out.println("Your waitlist position: " + position);
+    }
+
+    public void showWaitlist(String userId) {
+        showWaitlistStatus(userId);
+    }
+
+    public void showAllSeats() {
+        for (Seat seat : seats) {
+            System.out.println(seat);
+        }
+    }
+
+    public void showAllReservations() {
+        for (Reservation reservation : reservations) {
+            System.out.println(reservation);
+        }
     }
 }

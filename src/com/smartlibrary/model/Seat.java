@@ -27,6 +27,7 @@ public class Seat {
 
     @Override
     public String toString() {
-        return "Seat ID: " + seatId + " | Available: " + available;
+        String status = available ? "Available" : "Busy";
+        return "Seat " + seatId + " - " + status;
     }
 }

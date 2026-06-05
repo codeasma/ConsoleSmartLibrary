@@ -1,5 +1,6 @@
 package com.smartlibrary.model;
 
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
 public class Reservation {
@@ -50,10 +51,12 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation ID: " + reservationId +
-                " | Student ID: " + studentId +
-                " | Seat ID: " + seat.getSeatId() +
-                " | Expiration Time: " + expirationTime +
-                " | Active: " + active;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String status = active ? "Active" : "Cancelled / Expired";
+
+        return "Seat ID: " + seat.getSeatId() +
+                " | Reservation Time: " + reservationTime.format(formatter) +
+                " | Expiration Time: " + expirationTime.format(formatter) +
+                " | Status: " + status;
     }
 }

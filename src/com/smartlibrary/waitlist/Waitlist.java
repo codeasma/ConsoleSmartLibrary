@@ -31,4 +31,21 @@ public class Waitlist {
     public String toString() {
         return "Waitlist: " + waitingStudents;
     }
+
+    public boolean containsStudent(String userId) {
+        return waitingStudents.contains(userId);
+    }
+
+    public int getStudentPosition(String userId) {
+        int position = 1;
+
+        for (String waitingStudent : waitingStudents) {
+            if (waitingStudent.equals(userId)) {
+                return position;
+            }
+            position++;
+        }
+
+        return -1;
+    }
 }
