@@ -9,6 +9,6 @@ public class PriorityReservationStrategy implements ReservationStrategy {
 
     @Override
     public int getExpirationMinutes() {
-        return 30; // priority reservation expires after 30 minutes if the student does not arrive
+        return 30; // priority reservation expires after 30 minutes if the user does not arrive
     }
 }

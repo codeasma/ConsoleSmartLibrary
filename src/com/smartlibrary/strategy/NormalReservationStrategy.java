@@ -9,6 +9,6 @@ public class NormalReservationStrategy implements ReservationStrategy {
 
     @Override
     public int getExpirationMinutes() {
-        return 15; // reservation expires after 15 minutes if the student does not arrive
+        return 15; // reservation expires after 15 minutes if the user does not arrive
     }
 }

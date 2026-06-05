@@ -5,15 +5,15 @@ import java.time.LocalDateTime;
 
 public class Reservation {
     private int reservationId;
-    private String studentId;
+    private String userId;
     private Seat seat;
     private LocalDateTime reservationTime;
     private LocalDateTime expirationTime;
     private boolean active;
 
-    public Reservation(int reservationId, String studentId, Seat seat, int expirationMinutes) {
+    public Reservation(int reservationId, String userId, Seat seat, int expirationMinutes) {
         this.reservationId = reservationId;
-        this.studentId = studentId;
+        this.userId = userId;
         this.seat = seat;
         this.reservationTime = LocalDateTime.now();
         this.expirationTime = reservationTime.plusMinutes(expirationMinutes);
@@ -24,8 +24,8 @@ public class Reservation {
         return reservationId;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getUserId() {
+        return userId;
     }
 
     public Seat getSeat() {

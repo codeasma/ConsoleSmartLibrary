@@ -36,7 +36,7 @@ public class ReservationService {
         checkExpiredReservationsSilently();
 
         for (Reservation reservation : reservations) {
-            if (reservation.getStudentId().equals(userId) && reservation.isActive()) {
+            if (reservation.getUserId().equals(userId) && reservation.isActive()) {
                 System.out.println("You already have an active seat reservation. Please cancel it before making a new one.");
                 return;
             }
@@ -103,7 +103,7 @@ public class ReservationService {
         Reservation activeReservation = null;
 
         for (Reservation reservation : reservations) {
-            if (reservation.getStudentId().equals(userId) && reservation.isActive()) {
+            if (reservation.getUserId().equals(userId) && reservation.isActive()) {
                 activeReservation = reservation;
                 break;
             }
@@ -156,7 +156,7 @@ public class ReservationService {
         boolean found = false;
 
         for (Reservation reservation : reservations) {
-            if (reservation.getStudentId().equals(userId)) {
+            if (reservation.getUserId().equals(userId)) {
                 System.out.println(reservation);
                 found = true;
             }

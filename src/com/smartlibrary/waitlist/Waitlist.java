@@ -10,9 +10,14 @@ public class Waitlist {
         this.waitingStudents = new LinkedList<>();
     }
 
-    public void addStudent(String studentId) {
-        waitingStudents.add(studentId);
-        System.out.println("Student " + studentId + " has been added to the waitlist.");
+    public void addStudent(String userId) {
+        if (waitingStudents.contains(userId)) {
+            System.out.println("You are already in the waitlist.");
+            return;
+        }
+
+        waitingStudents.add(userId);
+        System.out.println("You have been added to the waitlist.");
     }
 
     public String getNextStudent() {
