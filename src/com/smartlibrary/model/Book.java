@@ -1,3 +1,5 @@
+package com.smartlibrary.model;
+
 public class Book {
     private String id;
     private String title;

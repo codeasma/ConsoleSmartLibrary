@@ -1,3 +1,5 @@
+package com.smartlibrary.model;
+
 public class User {
     private String name;
     private String id;
@@ -12,4 +14,4 @@ public class User {
     public String getName() { return name; }
     public String getId() { return id; }
     public StudentType getType() { return type; }
-}
+} 

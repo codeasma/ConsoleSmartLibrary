@@ -1,7 +1,8 @@
 package com.smartlibrary;
 
 import com.smartlibrary.core.LibrarySystem;
-import com.smartlibrary.model.User;
+import java.util.Scanner;
+package com.smartlibrary.model.User;
 import com.smartlibrary.model.StudentType;
 
 import java.util.Scanner;

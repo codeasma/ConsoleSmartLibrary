@@ -1,3 +1,5 @@
+package com.smartlibrary.model;
+
 import java.time.LocalDate;
 
 public class BorrowRecord {
