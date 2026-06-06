@@ -39,3 +39,4 @@ public interface Subject {
      */
     void notifyAllObservers(String message);
 }
+

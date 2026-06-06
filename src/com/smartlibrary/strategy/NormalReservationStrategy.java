@@ -12,3 +12,4 @@ public class NormalReservationStrategy implements ReservationStrategy {
         return 15; // reservation expires after 15 minutes if the user does not arrive
     }
 }
+
