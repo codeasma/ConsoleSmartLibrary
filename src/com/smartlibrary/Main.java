@@ -1,9 +1,8 @@
 package com.smartlibrary;
 
 import com.smartlibrary.core.LibrarySystem;
-import com.smartlibrary.model.User;
 import com.smartlibrary.model.StudentType;
-
+import com.smartlibrary.model.User;
 import java.util.Scanner;
 
 /**
@@ -108,16 +107,24 @@ public class Main {
                 return newUser;
             }
             case 3: {
-                // Admin user — not in the student list, handled separately
-                return new User("Admin", "admin", StudentType.NORMAL);
-            }
-            case 0:
+    System.out.print("Enter admin password: ");
+    String adminPass = scanner.nextLine().trim();
+    if (adminPass.equals("admin123")) {
+        System.out.println("Welcome, Admin!");
+        return new User("Admin", "admin", StudentType.NORMAL);
+    } else {
+        System.out.println("Wrong password. Access denied.");
+        return loginMenu(system, scanner);
+    }
+}
+
+            case 0: 
                 return null;
             default:
                 System.out.println("Invalid choice.");
                 return loginMenu(system, scanner);
         }
-    }
+}
 
     private static boolean isAdmin(User user) {
         return user.getId().equals("admin");
