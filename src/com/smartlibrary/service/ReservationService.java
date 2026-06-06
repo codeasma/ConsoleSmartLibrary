@@ -197,5 +197,39 @@ public class ReservationService {
             System.out.println(reservation);
         }
     }
+
+    public void runObserverSimulation() {
+        System.out.println("\n=== Observer Pattern Simulation ===");
+
+        String userA = "User A";
+        String userB = "User B";
+
+        Seat demoSeat = new Seat(1);
+        Waitlist demoWaitlist = new Waitlist();
+
+        System.out.println("\nStep 1: " + userA + " reserves Seat 1.");
+        demoSeat.reserveSeat();
+        System.out.println("Seat 1 is now busy.");
+
+        System.out.println("\nStep 2: " + userB + " tries to reserve a seat.");
+        System.out.println("No available seats.");
+        demoWaitlist.addStudentSilently(userB);
+        System.out.println(userB + " has been added to the waitlist.");
+        System.out.println("User B's waitlist position: " + demoWaitlist.getStudentPosition(userB) + ".");
+
+        System.out.println("\nStep 3: " + userA + " cancels the reservation.");
+        demoSeat.releaseSeat();
+        System.out.println("Seat 1 is released and becomes available again.");
+
+        System.out.println("\nStep 4: Observer notification is triggered.");
+        String nextUser = demoWaitlist.getNextStudent();
+
+        if (notificationService != null) {
+            notificationService.notifySeatAvailable(nextUser, demoSeat.getSeatId());
+        }
+
+        System.out.println("Notification sent to " + nextUser + ": Seat " + demoSeat.getSeatId() + " is now available. Do you want to reserve it?");
+    }
+
 }
 

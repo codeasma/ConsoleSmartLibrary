@@ -136,24 +136,42 @@ public class Main {
             System.out.println("║  SEATS                                   ║");
             System.out.println("║   5. Reserve a seat                      ║");
             System.out.println("║   6. My reservations                     ║");
-            System.out.println("║   7. Show waitlist                       ║");
+            System.out.println("║   7. Cancel my seat reservation          ║");
+            System.out.println("║   8. My waitlist status                  ║");
             System.out.println("║  OTHER                                   ║");
-            System.out.println("║   8. Check book return reminders         ║");
+            System.out.println("║   9. Check book return reminders         ║");
+            System.out.println("║   S. Observer Pattern Simulation         ║");
             System.out.println("║   0. Logout                              ║");
             System.out.println("╚══════════════════════════════════════════╝");
             System.out.print("Choose: ");
 
-            int choice = readInt(scanner);
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("s")) {
+                system.runObserverSimulation();
+                waitForMainMenu(scanner);
+                continue;
+            }
+
+            int choice;
+            try {
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid option. Please try again.");
+                continue;
+            }
 
             switch (choice) {
                 case 1:
                     system.listAllBooks();
+                    waitForMainMenu(scanner);
                     break;
 
                 case 2:
                     System.out.print("Enter search keyword (title or author): ");
                     String keyword = scanner.nextLine().trim();
                     system.searchBooks(keyword);
+                    waitForMainMenu(scanner);
                     break;
 
                 case 3:
@@ -161,28 +179,39 @@ public class Main {
                     System.out.print("Enter Book ID to borrow: ");
                     String borrowId = scanner.nextLine().trim();
                     system.borrowBook(user, borrowId);
+                    waitForMainMenu(scanner);
                     break;
 
                 case 4:
                     System.out.print("Enter Book ID to return: ");
                     String returnId = scanner.nextLine().trim();
                     system.returnBook(user, returnId);
+                    waitForMainMenu(scanner);
                     break;
 
                 case 5:
                     system.reserveSeat(user, scanner);
+                    waitForMainMenu(scanner);
                     break;
 
                 case 6:
                     system.showMyReservations(user, scanner);
+                    waitForMainMenu(scanner);
                     break;
 
                 case 7:
-                    system.showWaitlist(user);
+                    system.cancelReservation(user, scanner);
+                    waitForMainMenu(scanner);
                     break;
 
                 case 8:
+                    system.showWaitlist(user);
+                    waitForMainMenu(scanner);
+                    break;
+
+                case 9:
                     system.checkAndSendBookReminders();
+                    waitForMainMenu(scanner);
                     break;
 
                 case 0:
@@ -217,14 +246,17 @@ public class Main {
             switch (choice) {
                 case 1:
                     system.showAdminSeatOccupancy();
+                    waitForMainMenu(scanner);
                     break;
 
                 case 2:
                     system.showAdminReservationActivity();
+                    waitForMainMenu(scanner);
                     break;
 
                 case 3:
                     system.showAdminNotificationLog();
+                    waitForMainMenu(scanner);
                     break;
 
                 case 4:
@@ -233,10 +265,12 @@ public class Main {
                         System.out.println("  [" + u.getId() + "] "
                             + u.getName() + " | " + u.getType());
                     }
+                    waitForMainMenu(scanner);
                     break;
 
                 case 5:
                     system.listAllBooks();
+                    waitForMainMenu(scanner);
                     break;
 
                 case 0:
@@ -249,9 +283,19 @@ public class Main {
     }
 
 
+
+    private static void waitForMainMenu(Scanner scanner) {
+        System.out.print("\nPress M to return to the main menu: ");
+
+        while (!scanner.nextLine().equalsIgnoreCase("m")) {
+            System.out.print("Please press M to return to the main menu: ");
+        }
+    }
+
     /**
      * Safe integer read — handles bad input without crashing.
      */
+
     private static int readInt(Scanner scanner) {
         while (true) {
             try {
