@@ -183,7 +183,7 @@ public class LibrarySystem {
     }
 
     public void showWaitlist() {
-        reservationService.showWaitlist();
+        reservationService.showWaitlist(user.getId());
     }
 
     // -------------------------------------------------------------------------

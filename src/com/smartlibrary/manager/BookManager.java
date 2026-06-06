@@ -2,6 +2,10 @@ package com.smartlibrary.manager;
 
 import java.time.LocalDate;
 import java.util.*;
+import com.smartlibrary.model.Book;
+import com.smartlibrary.model.BorrowRecord;
+import com.smartlibrary.model.User;
+import com.smartlibrary.strategy.BorrowStrategy;
 
 public class BookManager {
     private List<Book> books = new ArrayList<>();
