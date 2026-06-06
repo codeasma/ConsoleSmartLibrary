@@ -1,8 +1,7 @@
 package com.smartlibrary;
 
 import com.smartlibrary.core.LibrarySystem;
-import java.util.Scanner;
-package com.smartlibrary.model.User;
+import com.smartlibrary.model.User;
 import com.smartlibrary.model.StudentType;
 
 import java.util.Scanner;
@@ -179,7 +178,7 @@ public class Main {
                     break;
 
                 case 7:
-                    system.showWaitlist();
+                    system.showWaitlist(user);
                     break;
 
                 case 8:

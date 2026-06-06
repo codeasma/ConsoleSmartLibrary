@@ -182,7 +182,7 @@ public class LibrarySystem {
         reservationService.showMyReservations(user.getId(), scanner);
     }
 
-    public void showWaitlist() {
+    public void showWaitlist(User user) {
         reservationService.showWaitlist(user.getId());
     }
 
