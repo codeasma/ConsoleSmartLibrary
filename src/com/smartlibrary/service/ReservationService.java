@@ -4,7 +4,6 @@ import com.smartlibrary.model.Reservation;
 import com.smartlibrary.model.Seat;
 import com.smartlibrary.strategy.ReservationStrategy;
 import com.smartlibrary.waitlist.Waitlist;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;

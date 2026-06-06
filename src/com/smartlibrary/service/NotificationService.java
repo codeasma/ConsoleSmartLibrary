@@ -2,20 +2,14 @@ package com.smartlibrary.service;
 
 import com.smartlibrary.observer.Observer;
 import com.smartlibrary.observer.Subject;
-
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Observer Pattern – Concrete Subject
- *
- * NotificationService is the central hub for all notifications in the system.
- * It maintains a registry of studentId → Observer mappings and delivers
- * messages to the right student when events occur.
- *
  * Events handled:
  *   1. Seat becomes available → notify next waitlisted student
  *   2. Book return reminder   → notify a student before their due date

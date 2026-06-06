@@ -4,3 +4,4 @@ public interface BorrowStrategy {
     LocalDate calculateDueDate(LocalDate borrowDate);
     String getDescription();
 }
+
