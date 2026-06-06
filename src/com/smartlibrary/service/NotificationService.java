@@ -79,6 +79,12 @@ public class NotificationService implements Subject {
             "Please arrive promptly to claim your reservation.");
     }
 
+    public void notifySeatAvailable(String studentId, int seatId) {
+        notifyObserver(studentId,
+                "Notification sent to " + studentId + ": Seat " + seatId +
+                        " is now available. Do you want to reserve it?");
+    }
+
     /**
      * Called before a book's due date to remind the student to return it.
      *

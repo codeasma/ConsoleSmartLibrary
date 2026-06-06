@@ -20,6 +20,12 @@ public class Waitlist {
         System.out.println("You have been added to the waitlist.");
     }
 
+    public void addStudentSilently(String userId) {
+        if (!waitingStudents.contains(userId)) {
+            waitingStudents.add(userId);
+        }
+    }
+
     public String getNextStudent() {
         return waitingStudents.poll();
     }

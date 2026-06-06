@@ -186,6 +186,14 @@ public class LibrarySystem {
         reservationService.showWaitlist(user.getId());
     }
 
+    public void cancelReservation(User user, Scanner scanner) {
+        reservationService.cancelReservation(user.getId(), scanner);
+    }
+
+    public void runObserverSimulation() {
+        reservationService.runObserverSimulation();
+    }
+
     // -------------------------------------------------------------------------
     // Notification operations
     // -------------------------------------------------------------------------
