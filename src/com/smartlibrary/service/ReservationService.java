@@ -52,8 +52,13 @@ public class ReservationService {
         }
 
         if (availableSeats.isEmpty()) {
-            System.out.print("No available seats. Do you want to join the waitlist? (yes/no): ");
-            String answer = scanner.nextLine();
+            System.out.print("No available seats. Do you want to join the waitlist? (yes/no), or press M to return to the main menu: ");
+            String answer = scanner.nextLine().trim();
+
+            if (answer.equalsIgnoreCase("m")) {
+                System.out.println("Returning to main menu...");
+                return;
+            }
 
             if (answer.equalsIgnoreCase("yes")) {
                 waitlist.addStudent(userId);
@@ -63,9 +68,22 @@ public class ReservationService {
             return;
         }
 
-        System.out.print("Enter the seat ID you want to reserve: ");
-        int selectedSeatId = scanner.nextInt();
-        scanner.nextLine();
+        System.out.print("Enter the seat ID you want to reserve, or press M to return to the main menu: ");
+        String seatInput = scanner.nextLine().trim();
+
+        if (seatInput.equalsIgnoreCase("m")) {
+            System.out.println("Returning to main menu...");
+            return;
+        }
+
+        int selectedSeatId;
+
+        try {
+            selectedSeatId = Integer.parseInt(seatInput);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Returning to main menu...");
+            return;
+        }
 
         Seat selectedSeat = null;
         for (Seat seat : availableSeats) {
@@ -115,9 +133,13 @@ public class ReservationService {
 
         System.out.println("You have an active reservation:");
         System.out.println(activeReservation);
-        System.out.print("Do you want to cancel this reservation? (yes/no): ");
+        System.out.print("Do you want to cancel this reservation? (yes/no), or press M to return to the main menu: ");
+        String answer = scanner.nextLine().trim();
 
-        String answer = scanner.nextLine();
+        if (answer.equalsIgnoreCase("m")) {
+            System.out.println("Returning to main menu...");
+            return;
+        }
 
         if (answer.equalsIgnoreCase("yes")) {
             activeReservation.cancelReservation();

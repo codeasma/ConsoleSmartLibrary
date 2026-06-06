@@ -33,21 +33,25 @@ public class Main {
         system.checkAndSendBookReminders();
 
         // Login
-        User currentUser = loginMenu(system, scanner);
-        if (currentUser == null) {
-            System.out.println("Exiting system.");
-            scanner.close();
-            return;
-        }
+        while (true) {
+            User currentUser = loginMenu(system, scanner);
 
-        System.out.println("\nWelcome, " + currentUser.getName() + "! ["
-            + currentUser.getType() + " STUDENT | ID: " + currentUser.getId() + "]");
+            if (currentUser == null) {
+                System.out.println("Exiting system.");
+                break;
+            }
 
-        // Route to correct menu
-        if (isAdmin(currentUser)) {
-            adminMenu(system, scanner);
-        } else {
-            studentMenu(system, currentUser, scanner);
+            System.out.println("\nWelcome, " + currentUser.getName() + "! ["
+                    + currentUser.getType() + " STUDENT | ID: " + currentUser.getId() + "]");
+
+            if (isAdmin(currentUser)) {
+                adminMenu(system, scanner);
+            } else {
+                studentMenu(system, currentUser, scanner);
+            }
+
+            System.out.println("\nYou have logged out.");
+            waitForLoginScreen(scanner);
         }
 
         System.out.println("\nThank you for using the Smart Library System. Goodbye!");
@@ -141,7 +145,7 @@ public class Main {
             System.out.println("║  OTHER                                   ║");
             System.out.println("║   9. Check book return reminders         ║");
             System.out.println("║   S. Observer Pattern Simulation         ║");
-            System.out.println("║   0. Logout                              ║");
+            System.out.println("║   0. Logout / Back to Login Screen       ║");
             System.out.println("╚══════════════════════════════════════════╝");
             System.out.print("Choose: ");
 
@@ -168,30 +172,44 @@ public class Main {
                     break;
 
                 case 2:
-                    System.out.print("Enter search keyword (title or author): ");
+                    System.out.print("Enter search keyword (title or author), or press M to return to the main menu: ");
                     String keyword = scanner.nextLine().trim();
+
+                    if (keyword.equalsIgnoreCase("m")) {
+                        break;
+                    }
+
                     system.searchBooks(keyword);
                     waitForMainMenu(scanner);
                     break;
 
                 case 3:
                     system.listAllBooks();
-                    System.out.print("Enter Book ID to borrow: ");
+                    System.out.print("Enter Book ID to borrow, or press M to return to the main menu: ");
                     String borrowId = scanner.nextLine().trim();
+
+                    if (borrowId.equalsIgnoreCase("m")) {
+                        break;
+                    }
+
                     system.borrowBook(user, borrowId);
                     waitForMainMenu(scanner);
                     break;
 
                 case 4:
-                    System.out.print("Enter Book ID to return: ");
+                    System.out.print("Enter Book ID to return, or press M to return to the main menu: ");
                     String returnId = scanner.nextLine().trim();
+
+                    if (returnId.equalsIgnoreCase("m")) {
+                        break;
+                    }
+
                     system.returnBook(user, returnId);
                     waitForMainMenu(scanner);
                     break;
 
                 case 5:
                     system.reserveSeat(user, scanner);
-                    waitForMainMenu(scanner);
                     break;
 
                 case 6:
@@ -219,6 +237,7 @@ public class Main {
 
                 default:
                     System.out.println("Invalid option. Please try again.");
+                    waitForMainMenu(scanner);
             }
         }
     }
@@ -237,7 +256,7 @@ public class Main {
             System.out.println("║   3. View notification log               ║");
             System.out.println("║   4. List all users                      ║");
             System.out.println("║   5. List all books                      ║");
-            System.out.println("║   0. Logout                              ║");
+            System.out.println("║   0. Logout / Back to Login Screen       ║");
             System.out.println("╚══════════════════════════════════════════╝");
             System.out.print("Choose: ");
 
@@ -278,6 +297,7 @@ public class Main {
 
                 default:
                     System.out.println("Invalid option. Please try again.");
+                    waitForMainMenu(scanner);
             }
         }
     }
@@ -289,6 +309,14 @@ public class Main {
 
         while (!scanner.nextLine().equalsIgnoreCase("m")) {
             System.out.print("Please press M to return to the main menu: ");
+        }
+    }
+
+    private static void waitForLoginScreen(Scanner scanner) {
+        System.out.print("Press L to return to the login screen: ");
+
+        while (!scanner.nextLine().equalsIgnoreCase("l")) {
+            System.out.print("Please press L to return to the login screen: ");
         }
     }
 
