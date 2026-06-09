@@ -104,6 +104,7 @@ public class ReservationService {
                 reservationCounter++,
                 userId,
                 selectedSeat,
+                strategy.getReservationDuration(),
                 strategy.getExpirationMinutes()
         );
 
@@ -112,6 +113,16 @@ public class ReservationService {
         System.out.println("Seat " + selectedSeat.getSeatId() + " is reserved successfully for you.");
         System.out.println("Reservation duration: " + strategy.getReservationDuration() + " hours.");
         System.out.println("This seat expires in " + strategy.getExpirationMinutes() + " minutes.");
+
+        if (notificationService != null) {
+            notificationService.notifySeatReserved(
+                    userId,
+                    selectedSeat.getSeatId(),
+                    strategy.getReservationDuration(),
+                    strategy.getExpirationMinutes()
+            );
+            System.out.println("Reservation details sent as notification.");
+        }
     }
 
     public void cancelReservation(String userId, Scanner scanner) {
@@ -142,8 +153,16 @@ public class ReservationService {
         }
 
         if (answer.equalsIgnoreCase("yes")) {
+            int cancelledSeatId = activeReservation.getSeat().getSeatId();
+
             activeReservation.cancelReservation();
             System.out.println("Your reservation has been cancelled successfully.");
+
+            if (notificationService != null) {
+                notificationService.notifySeatReservationCancelled(userId, cancelledSeatId);
+                System.out.println("Cancellation details sent as notification.");
+            }
+
             assignSeatToNextWaitlistedStudent();
         } else {
             System.out.println("Reservation was not cancelled.");

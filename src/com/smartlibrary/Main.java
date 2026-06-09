@@ -217,6 +217,7 @@ public class Main {
 
                 case 5:
                     system.reserveSeat(user, scanner);
+                    waitForMainMenu(scanner);
                     break;
 
                 case 6:

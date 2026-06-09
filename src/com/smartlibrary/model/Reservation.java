@@ -8,15 +8,17 @@ public class Reservation {
     private String userId;
     private Seat seat;
     private LocalDateTime reservationTime;
-    private LocalDateTime expirationTime;
+    private LocalDateTime arrivalExpirationTime;
+    private LocalDateTime reservationEndTime;
     private boolean active;
 
-    public Reservation(int reservationId, String userId, Seat seat, int expirationMinutes) {
+    public Reservation(int reservationId, String userId, Seat seat, int reservationDurationHours, int expirationMinutes) {
         this.reservationId = reservationId;
         this.userId = userId;
         this.seat = seat;
         this.reservationTime = LocalDateTime.now();
-        this.expirationTime = reservationTime.plusMinutes(expirationMinutes);
+        this.arrivalExpirationTime = reservationTime.plusMinutes(expirationMinutes);
+        this.reservationEndTime = reservationTime.plusHours(reservationDurationHours);
         this.active = true;
     }
 
@@ -32,8 +34,12 @@ public class Reservation {
         return seat;
     }
 
-    public LocalDateTime getExpirationTime() {
-        return expirationTime;
+    public LocalDateTime getArrivalExpirationTime() {
+        return arrivalExpirationTime;
+    }
+
+    public LocalDateTime getReservationEndTime() {
+        return reservationEndTime;
     }
 
     public boolean isActive() {
@@ -41,7 +47,7 @@ public class Reservation {
     }
 
     public boolean isExpired() {
-        return LocalDateTime.now().isAfter(expirationTime);
+        return LocalDateTime.now().isAfter(arrivalExpirationTime);
     }
 
     public void cancelReservation() {
@@ -56,7 +62,8 @@ public class Reservation {
 
         return "Seat ID: " + seat.getSeatId() +
                 " | Reservation Time: " + reservationTime.format(formatter) +
-                " | Expiration Time: " + expirationTime.format(formatter) +
+                " | Arrival Expiration: " + arrivalExpirationTime.format(formatter) +
+                " | Reservation Ends: " + reservationEndTime.format(formatter) +
                 " | Status: " + status;
     }
 }
