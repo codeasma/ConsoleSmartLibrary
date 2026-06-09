@@ -6,20 +6,10 @@ import com.smartlibrary.model.Book;
 import com.smartlibrary.model.BorrowRecord;
 import com.smartlibrary.model.User;
 import com.smartlibrary.strategy.BorrowStrategy;
-import com.smartlibrary.service.NotificationService;
 
 public class BookManager {
     private List<Book> books = new ArrayList<>();
     private List<BorrowRecord> borrowRecords = new ArrayList<>();
-    private NotificationService notificationService;
-
-    public BookManager() {
-        this(null);
-    }
-
-    public BookManager(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
 
     public void addBook(Book book) {
         books.add(book);
@@ -45,16 +35,8 @@ public class BookManager {
                 LocalDate dueDate = strategy.calculateDueDate(today);
                 BorrowRecord record = new BorrowRecord(user, b, today, dueDate);
                 borrowRecords.add(record);
-                System.out.println("Book borrowed successfully. Details sent as notification:");
-
-                if (notificationService != null) {
-                    notificationService.notifyBookBorrowed(user.getId(), b.getTitle(), dueDate, strategy.getDescription());
-                } else {
-                    System.out.println("Book: " + b.getTitle());
-                    System.out.println("Due date: " + dueDate);
-                    System.out.println("Policy: " + strategy.getDescription());
-                }
-
+                System.out.println("Book borrowed! Due date: " + dueDate);
+                System.out.println("Policy: " + strategy.getDescription());
                 return record;
             }
         }
@@ -70,19 +52,11 @@ public class BookManager {
                 int fine = r.calculateFine(today);
                 r.getBook().setAvailable(true);
                 toRemove = r;
-                System.out.println("Book returned successfully. Details sent as notification:");
-
-                if (notificationService != null) {
-                    notificationService.notifyBookReturned(user.getId(), r.getBook().getTitle(), fine);
+                if (fine > 0) {
+                    System.out.println("Late return! Fine: " + fine + " TL");
                 } else {
-                    System.out.println("Book: " + r.getBook().getTitle());
-                    if (fine > 0) {
-                        System.out.println("Late return. Fine: " + fine + " TL");
-                    } else {
-                        System.out.println("Returned on time. No fine.");
-                    }
+                    System.out.println("Book returned on time. No fine.");
                 }
-
                 break;
             }
         }

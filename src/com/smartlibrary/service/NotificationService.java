@@ -85,33 +85,6 @@ public class NotificationService implements Subject {
                         " is now available. Do you want to reserve it?");
     }
 
-    public void notifyBookBorrowed(String studentId, String bookTitle, LocalDate dueDate, String policy) {
-        notifyObserver(studentId,
-                "[BOOK NOTIFICATION] Book borrowed successfully.\n" +
-                        "Book: " + bookTitle + "\n" +
-                        "Borrow duration: 14 days.");
-    }
-
-    public void notifyBookReturned(String studentId, String bookTitle, int fine) {
-        notifyObserver(studentId,
-                "[BOOK NOTIFICATION] Book returned successfully.\n" +
-                        "Book: " + bookTitle + "\n" +
-                        "The book is now available.");
-    }
-
-    public void notifySeatReserved(String studentId, int seatId) {
-        notifyObserver(studentId,
-                "[RESERVATION NOTIFICATION] Reservation successful.\n" +
-                        "Seat ID: " + seatId + "\n" +
-                        "Reservation duration: 2 hours.\n" +
-                        "This seat expires in 15 minutes.");
-    }
-
-    public void notifyReservationCancelled(String studentId) {
-        notifyObserver(studentId,
-                "[RESERVATION NOTIFICATION] Your reservation has been cancelled.");
-    }
-
     /**
      * Called before a book's due date to remind the student to return it.
      *
