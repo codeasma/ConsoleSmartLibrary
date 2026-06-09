@@ -43,7 +43,7 @@ public class LibrarySystem {
     private LibrarySystem() {
         notificationService = new NotificationService();
         reservationService  = new ReservationService(notificationService);
-        bookManager         = new BookManager();
+        bookManager         = new BookManager(notificationService);
         users               = new ArrayList<>();
 
         seedData();

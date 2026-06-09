@@ -109,9 +109,8 @@ public class ReservationService {
 
         reservations.add(reservation);
 
-        System.out.println("Seat " + selectedSeat.getSeatId() + " is reserved successfully for you.");
-        System.out.println("Reservation duration: " + strategy.getReservationDuration() + " hours.");
-        System.out.println("This seat expires in " + strategy.getExpirationMinutes() + " minutes.");
+        System.out.println("Reservation successful. Details sent as notification:");
+        notificationService.notifySeatReserved(userId, selectedSeatId);
     }
 
     public void cancelReservation(String userId, Scanner scanner) {
@@ -143,7 +142,15 @@ public class ReservationService {
 
         if (answer.equalsIgnoreCase("yes")) {
             activeReservation.cancelReservation();
-            System.out.println("Your reservation has been cancelled successfully.");
+
+            System.out.println("Reservation cancelled. Details sent as notification:");
+
+            if (notificationService != null) {
+                notificationService.notifyReservationCancelled(userId);
+            } else {
+                System.out.println("Your reservation has been cancelled.");
+            }
+
             assignSeatToNextWaitlistedStudent();
         } else {
             System.out.println("Reservation was not cancelled.");
